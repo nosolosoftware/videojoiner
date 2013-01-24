@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "videojoiner"
-  s.version = "0.0.0"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Rafael Perez", "Luis Ciudad"]
-  s.date = "2013-01-23"
+  s.date = "2013-01-24"
   s.description = "This gem contains modules to create a single video file using a set of videos as input, via ffmpeg concat demuxer."
   s.email = ["rperez@nosolosoftware.biz", "lciudad@nosolosoftware.biz"]
   s.extra_rdoc_files = [
@@ -27,11 +27,15 @@ Gem::Specification.new do |s|
     "features/step_definitions/join_steps.rb",
     "features/support/env.rb",
     "features/support/hooks.rb",
-    "features/support/incorrect.mp4",
     "features/support/sample.mp4",
+    "features/support/unknown_format.mp4",
+    "features/support/zero_duration.mp4",
     "lib/videojoiner.rb",
     "lib/videojoiner/ffmpeg/joiner_process.rb",
     "lib/videojoiner/joiner.rb",
+    "lib/videojoiner/rvideo_patch.rb",
+    "log/.gitkeep",
+    "video_root/.gitkeep",
     "videojoiner.gemspec"
   ]
   s.homepage = "https://projects.nosolosoftware.biz/mwengine/videojoiner"
@@ -61,6 +65,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<chronic>, ["= 0.3.0"])
       s.add_development_dependency(%q<metrical>, ["~> 0.1.0"])
       s.add_development_dependency(%q<rvideo>, ["~> 0.9.3"])
+      s.add_development_dependency(%q<yard>, ["~> 0.8.3"])
     else
       s.add_dependency(%q<runnable>, ["~> 0.3.1"])
       s.add_dependency(%q<wait_for>, ["~> 0.1.1"])
@@ -79,6 +84,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<chronic>, ["= 0.3.0"])
       s.add_dependency(%q<metrical>, ["~> 0.1.0"])
       s.add_dependency(%q<rvideo>, ["~> 0.9.3"])
+      s.add_dependency(%q<yard>, ["~> 0.8.3"])
     end
   else
     s.add_dependency(%q<runnable>, ["~> 0.3.1"])
@@ -98,6 +104,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<chronic>, ["= 0.3.0"])
     s.add_dependency(%q<metrical>, ["~> 0.1.0"])
     s.add_dependency(%q<rvideo>, ["~> 0.9.3"])
+    s.add_dependency(%q<yard>, ["~> 0.8.3"])
   end
 end
 
