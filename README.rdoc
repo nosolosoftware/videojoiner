@@ -1,6 +1,7 @@
 = videojoiner
 
-Description goes here.
+A gem with methods for joining a set of video files into a single one.
+Uses FFMpeg for te video concatenation.
 
 == Contributing to videojoiner
  

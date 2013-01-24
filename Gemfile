@@ -20,6 +20,7 @@ group :development do
   gem "chronic", '0.3.0'
   gem "metrical", "~> 0.1.0"
   gem "rvideo", "~> 0.9.3"
+  gem "yard", "~> 0.8.3"
 end
 
 gem "runnable", "~> 0.3.1"
