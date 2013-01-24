@@ -32,13 +32,14 @@ Given /^I have a set of invalid videos$/ do
   for i in 1..2 do
     FileUtils.copy( "features/support/sample.mp4", "/tmp/#{i}.mp4" )
   end
-  FileUtils.copy( "features/support/incorrect.mp4", "/tmp/3.mp4" )
-  @video_routes = [ "/tmp/1.mp4", "/tmp/2.mp4", "/tmp/3.mp4" ]
+  FileUtils.copy( "features/support/unknown_format.mp4", "/tmp/3.mp4" )
+  FileUtils.copy( "features/support/zero_duration.mp4", "/tmp/4.mp4" )
+  @video_routes = [ "/tmp/1.mp4", "/tmp/2.mp4", "/tmp/3.mp4", "/tmp/4.mp4" ]
 end
 
 Then /^it should report that a video from the set is invalid$/ do
   job = Videojoiner::FFMpeg::Joiner.fetch( @joiner_job.id )
-  job.video_list.to_s.should include "invalid"
+  job.video_list.to_s.count( "invalid" ) == 2
 end
 
 Then /^it should report that the job creation was unsucessful$/ do
