@@ -38,7 +38,7 @@ Gem::Specification.new do |s|
     "video_root/.gitkeep",
     "videojoiner.gemspec"
   ]
-  s.homepage = "https://projects.nosolosoftware.biz/mwengine/videojoiner"
+  s.homepage = "https://github.com/rcpj/videojoiner"
   s.licenses = ["GPLv3"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.24"

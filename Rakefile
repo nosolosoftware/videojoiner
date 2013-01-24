@@ -15,7 +15,7 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "videojoiner"
-  gem.homepage = "https://projects.nosolosoftware.biz/mwengine/videojoiner"
+  gem.homepage = "https://github.com/rcpj/videojoiner"
   gem.license = "GPLv3"
   gem.summary = %Q{Gem to join sets of video files into a single video file using ffmpeg}
   gem.description = %Q{This gem contains modules to create a single video file using a set of videos as input, via ffmpeg concat demuxer.}
