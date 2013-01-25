@@ -11,8 +11,8 @@ module Videojoiner
       # @param video_sources [array] An array of video files
       def initialize( id, video_sources )
         @id = id
-        @video_list = self.class.probe_videos( video_sources )
         @output_file = ""
+        @video_list = self.class.probe_videos( video_sources )
         @process = Videojoiner::FFMpeg::JoinerProcess.new
         @process.log_path = "log/"
         # Path to a text file with the list of videos to be used for ffmpeg's concat demuxer
@@ -44,7 +44,7 @@ module Videojoiner
       # @return true if the job removal was sucessful
       # @return false otherwise
       def delete
-        if self.class.exist?( @id )
+        if self.class.exist?( @id ) 
           self.class.remove_job( @id )
           File.delete( "#{@config_file}" ) unless !File.exist?( "#{@config_file}" )
           File.delete( "#{@output_file}" ) unless !File.exist?( "#{@output_file}" )
@@ -61,39 +61,32 @@ module Videojoiner
         output.include?( "No more output streams to write to, finishing." ) && output.include?( "muxing overhead" ) 
       end
 
+      def size
+        total_size = 0
+        @video_list.each_value{ | element | total_size += element[ :size ] unless element[ :status ] == 'invalid' }
+        total_size
+      end
+
       class << self
 
-        attr_accessor :config_path
-
-        # Check that the video sources passed has parameters are valid for the joining process
-        # @param video_sources [array] an array with the source videos
-        # @return a hash with the source videos and its validation status
-        def probe_videos( video_sources )
-          video_list = Hash.new
-
-          video_sources.each do |source|
-            inspector = RVideo::Inspector.new( :file => "#{source}" )
-            if ( inspector.valid? ) && ( inspector.duration > 0 )
-              video_list.store( source, 'valid' )
-            else
-              video_list.store( source, 'invalid' )
-            end
-          end
-          video_list
-        end
+        attr_accessor :config_path, :max_size
 
         # Check if the job list is empty
         # @return true if the list is empty
         # @return false otherwise
         def empty?
-          joiner_list.empty?
+          job_list.empty?
         end
 
         # Fetches a job from the job list by it ID
         # @param id [string] the job ID
         # @return the job with that ID
         def fetch( id )
-          joiner_list.fetch( id ) unless empty?
+          begin
+            job_list.fetch( id ) unless empty?
+          rescue KeyError
+            false
+          end
         end
 
         # Check if a job exist in the job list
@@ -101,26 +94,49 @@ module Videojoiner
         # @return true if the job exist
         # @return false otherwise
         def exist?( id )
-          joiner_list.has_key?( id ) unless empty?
+          job_list.has_key?( id ) unless empty?
         end
 
         # Clears the job list
         def clear_list
-          joiner_list.clear unless empty?
+          job_list.clear unless empty?
         end
 
         # Adds a video joiner job to the job list
         # @param id [string] the job ID
         # @param joiner  [Videojoiner::FFMpeg::Joiner] the joiner job object
         def add_job( id, joiner )
-          joiner_list.store( id, joiner )
+          if exist?( id )
+            false
+          else
+            job_list.store( id, joiner )
+          end
         end
 
         # Removes a video joiner job from the job list
         # @param id [string] the job ID
         def remove_job( id )
-          joiner_list.fetch( id ).process.stop unless joiner_list.fetch( id ).process.pid == nil
-          joiner_list.delete( id )
+          if exist?( id ) 
+            job_list.delete( id )
+          else 
+            false
+          end
+        end
+
+        # Check that the video sources passed has parameters are valid for the joining process
+        # @param video_sources [array] an array with the source videos
+        # @return a hash with the source videos, its validation status and size
+        def probe_videos( video_sources )
+          output = Hash.new
+          video_sources.each do |source|
+            inspector = RVideo::Inspector.new( :file => "#{source}" ) unless !File.exist?( source )
+            if inspector && ( inspector.valid? ) && ( inspector.duration > 0 )
+              output.store( source, { status: 'valid', size: File.size( source ) } )
+            else
+              output.store( source, 'invalid' )
+            end
+          end
+          output
         end
 
         # Yields the current object to configure some required parameters
@@ -132,10 +148,10 @@ module Videojoiner
 
         # Return the joiner job list, or generate an empty list if it don't exist already
         # It requires the setting of the config_path parameter previously
-        def joiner_list
+        def job_list
           raise ConfigurationError, "Missing configuration: please check Joiner.config_path" unless configured?
           raise ConfigPathError, "Config path not exist" unless Dir.exist?( config_path )
-          @joiner_list ||= Hash.new
+          @job_list ||= Hash.new
         end
 
         # Return the configuration status of the object

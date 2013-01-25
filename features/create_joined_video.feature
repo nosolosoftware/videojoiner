@@ -9,6 +9,7 @@ Feature: Join a set of videos into a single file
     And the video joiner job has finished
     Then there should be a valid video file
     And it should report all included videos as valid
+    And the destination video size should be correct
 
   Scenario: Create a joined video file from a set of invalid videos
     Given I have a set of invalid videos

@@ -51,3 +51,4 @@ pkg
 .rvmrc
 Gemfile.lock
 log/*.log
+video_root/*.mp4

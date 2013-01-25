@@ -8,7 +8,7 @@ end
 
 When /^I create the video joiner job with id "(.*?)"$/ do | id |
   @joiner_job = Videojoiner::FFMpeg::Joiner.new( id, @video_routes )
-  @joiner_job.create( { filename: "video_root/#{id}_#{Time.now.to_i}" } )
+@joiner_job.create( { filename: "video_root/#{id}_#{Time.now.to_i}" } )
 end
 
 When /^the video joiner job has finished$/ do
@@ -25,7 +25,7 @@ end
 
 Then /^it should report all included videos as valid$/ do
   job = Videojoiner::FFMpeg::Joiner.fetch( @joiner_job.id )
-  job.video_list.each_value{ |value| value.should == "valid" }
+  job.video_list.each_value{ |value| value[ :status ].should == "valid" }
 end
 
 Given /^I have a set of invalid videos$/ do
@@ -56,4 +56,9 @@ end
 
 Then /^it should report that the job deletion was unsucessful$/ do
   @status.should be_false
+end
+
+Then /^the destination video size should be correct$/ do
+  job = Videojoiner::FFMpeg::Joiner.fetch( @joiner_job.id )
+  job.size.should >= File.size?( job.output_file )
 end
