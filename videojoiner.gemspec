@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "videojoiner"
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Rafael Perez", "Luis Ciudad"]
-  s.date = "2013-01-24"
+  s.date = "2013-01-25"
   s.description = "This gem contains modules to create a single video file using a set of videos as input, via ffmpeg concat demuxer."
   s.email = ["rperez@nosolosoftware.biz", "lciudad@nosolosoftware.biz"]
   s.extra_rdoc_files = [
@@ -35,6 +35,8 @@ Gem::Specification.new do |s|
     "lib/videojoiner/joiner.rb",
     "lib/videojoiner/rvideo_patch.rb",
     "log/.gitkeep",
+    "spec/joiner_spec.rb",
+    "spec/spec_helper.rb",
     "video_root/.gitkeep",
     "videojoiner.gemspec"
   ]
