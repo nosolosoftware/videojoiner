@@ -61,6 +61,8 @@ module Videojoiner
         output.include?( "No more output streams to write to, finishing." ) && output.include?( "muxing overhead" ) 
       end
 
+      # Method that returns the total file size of the valid input videos
+      # @return the total file size
       def size
         total_size = 0
         @video_list.each_value{ | element | total_size += element[ :size ] unless element[ :status ] == 'invalid' }
@@ -69,7 +71,7 @@ module Videojoiner
 
       class << self
 
-        attr_accessor :config_path, :max_size
+        attr_accessor :config_path
 
         # Check if the job list is empty
         # @return true if the list is empty
@@ -81,6 +83,7 @@ module Videojoiner
         # Fetches a job from the job list by it ID
         # @param id [string] the job ID
         # @return the job with that ID
+        # @return false otherwise
         def fetch( id )
           begin
             job_list.fetch( id ) unless empty?
@@ -105,6 +108,7 @@ module Videojoiner
         # Adds a video joiner job to the job list
         # @param id [string] the job ID
         # @param joiner  [Videojoiner::FFMpeg::Joiner] the joiner job object
+        # @return false if the job exists already
         def add_job( id, joiner )
           if exist?( id )
             false
@@ -115,10 +119,11 @@ module Videojoiner
 
         # Removes a video joiner job from the job list
         # @param id [string] the job ID
+        # @return false if the job don't exists
         def remove_job( id )
           if exist?( id ) 
             job_list.delete( id )
-          else 
+          else
             false
           end
         end
