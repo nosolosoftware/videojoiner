@@ -21,6 +21,11 @@ describe Videojoiner::FFMpeg::Joiner do
   it "should return false when fetching an unexistent joiner job" do
     Videojoiner::FFMpeg::Joiner.fetch( "unexistent_job" ).should be_false
   end
+
+  it "should return 0 when getting the size of a joiner job with incorrect files only" do
+    @joiner = Videojoiner::FFMpeg::Joiner.new( "test", [ "features/support/unknown_format.mp4" ] )
+    @joiner.size.should be(0)
+  end
 end
 
 

@@ -138,7 +138,7 @@ module Videojoiner
             if inspector && ( inspector.valid? ) && ( inspector.duration > 0 )
               output.store( source, { status: 'valid', size: File.size( source ) } )
             else
-              output.store( source, 'invalid' )
+              output.store( source, { status: 'invalid' } )
             end
           end
           output

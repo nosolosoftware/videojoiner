@@ -20,7 +20,7 @@ module Videojoiner
 
         def make_ffmpeg_config( video_list, config_file )
           File.open( "#{config_file}","w" ) do |file|
-            video_list.each_pair{ |source, status| file.puts( "file '#{source}'" ) unless status == "invalid" }
+            video_list.each_pair{ |source, value| file.puts( "file '#{source}'" ) unless value[ :status ] == "invalid" }
           end
         end
       end
